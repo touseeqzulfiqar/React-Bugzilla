@@ -1,6 +1,21 @@
-import React from 'react'
+import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate instead of useHistory
 
 const NavBar = (props) => {
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
+  // Function to handle signout
+  const handleSignout = (e) => {
+    e.preventDefault(); // Prevent default anchor behavior
+
+    // Clear local storage
+    localStorage.removeItem("authToken"); // Replace with the actual key if necessary
+    localStorage.removeItem("role"); // Replace with the actual key if necessary
+
+    // Redirect to login page
+    navigate("/login"); // Replace '/login' with the actual path of your login page
+  };
+
   return (
     <div>
       <header className="bg-white shadow-md">
@@ -82,43 +97,20 @@ const NavBar = (props) => {
                       href="/"
                     >
                       {" "}
-                      Blog{" "}
+                      Contact{" "}
                     </a>
                   </li>
                 </ul>
               </nav>
 
-              <div className="flex items-center gap-4">
-                <div className="sm:flex sm:gap-4">
-
-                  <div className="hidden sm:flex">
-                    <a
-                      className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
-                      href="/"
-                    >
-                      Signout({props.userRole})
-                    </a>
-                  </div>
-                </div>
-
-                <div className="block md:hidden">
-                  <button className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="size-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4 6h16M4 12h16M4 18h16"
-                      />
-                    </svg>
-                  </button>
-                </div>
+              <div className="hidden md:flex md:gap-6">
+                <a
+                  className="block rounded-lg px-3 py-1 text-sm font-semibold text-gray-900 transition hover:bg-gray-100"
+                  href="/signout"
+                  onClick={handleSignout} // Attach handleSignout to onClick event
+                >
+                  Signout({props.userRole})
+                </a>
               </div>
             </div>
           </div>
@@ -126,6 +118,6 @@ const NavBar = (props) => {
       </header>
     </div>
   );
-}
+};
 
-export default NavBar
+export default NavBar;

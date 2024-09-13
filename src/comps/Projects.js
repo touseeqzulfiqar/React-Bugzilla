@@ -1,7 +1,9 @@
+// In Projects.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom"; // Import Link
 import NavBar from "./NavBar";
 
 const Projects = () => {
@@ -108,7 +110,6 @@ const Projects = () => {
     }
   };
 
-  // Update handleDeleteProject to remove the project from the list without refetching
   const handleDeleteProject = async (projectId) => {
     try {
       await axios.delete(`http://localhost:3000/projects/${projectId}`, {
@@ -117,7 +118,6 @@ const Projects = () => {
         },
       });
 
-      // Remove the deleted project from the list by filtering it out
       setProjects(projects.filter((project) => project.id !== projectId));
     } catch (error) {
       console.error("Error deleting project:", error);
@@ -200,18 +200,27 @@ const Projects = () => {
               {projects.length > 0 ? (
                 projects.map((project) => (
                   <tr key={project.id}>
-                    <td>{project.name}</td>
+                    <td>
+                      <Link
+                        to={`/projects/${project.id}`}
+                        className="text-blue-500 hover:underline"
+                      >
+                        {project.name}
+                      </Link>
+                    </td>
                     <td>{project.description}</td>
-                    <td className="whitespace-nowrap px-4 py-2">
+                    <td className="whitespace-nowrap px-4 py-2 text-gray-500">
                       <button
                         onClick={() => handleEditProject(project)}
-                        className="inline-block rounded bg-yellow-700 p-2 text-xs font-medium text-white hover:bg-yellow-800 mx-2"
+                        className="text-yellow-500 hover:underline"
+                        title="Edit"
                       >
                         <FontAwesomeIcon icon={faPen} />
                       </button>
                       <button
                         onClick={() => handleDeleteProject(project.id)}
-                        className="inline-block rounded bg-red-600 p-2 text-xs font-medium text-white hover:bg-red-700"
+                        className="text-red-600 hover:underline ml-4"
+                        title="Delete"
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
@@ -220,8 +229,8 @@ const Projects = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="text-center py-4 text-gray-500">
-                    No projects available
+                  <td colSpan="3" className="text-center py-4">
+                    No projects found
                   </td>
                 </tr>
               )}
@@ -232,27 +241,29 @@ const Projects = () => {
 
       {/* Modal for Add/Edit Project */}
       {showModal && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"
+          onClick={resetModal}
+        >
+          <div
+            className="w-1/3 bg-white p-4 rounded-lg shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="text-xl font-bold mb-4">
               {isEditing ? "Edit Project" : "Add New Project"}
             </h2>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (isEditing) {
-                  handleUpdateProject();
-                } else {
-                  handleAddProject();
-                }
+                isEditing ? handleUpdateProject() : handleAddProject();
               }}
             >
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="name"
+                  className="block text-gray-700 font-bold mb-2"
                 >
-                  Name
+                  Project Name
                 </label>
                 <input
                   type="text"
@@ -260,14 +271,14 @@ const Projects = () => {
                   name="name"
                   value={projectForm.name}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  className="w-full px-3 py-2 border rounded"
                   required
                 />
               </div>
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="description"
+                  className="block text-gray-700 font-bold mb-2"
                 >
                   Description
                 </label>
@@ -276,7 +287,8 @@ const Projects = () => {
                   name="description"
                   value={projectForm.description}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  className="w-full px-3 py-2 border rounded"
+                  rows="4"
                   required
                 ></textarea>
               </div>
@@ -284,13 +296,13 @@ const Projects = () => {
                 <button
                   type="button"
                   onClick={resetModal}
-                  className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                  className="mr-2 px-4 py-2 bg-gray-300 rounded"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                  className="px-4 py-2 bg-blue-500 text-white rounded"
                 >
                   {isEditing ? "Update" : "Add"}
                 </button>

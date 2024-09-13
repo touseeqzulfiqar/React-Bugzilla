@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom"; // for redirection after login
 import axios from "axios"; // Import Axios
 import Alert from "./Alert";
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
   const [form, setForm] = React.useState({ email: "", password: "" });
@@ -126,6 +127,17 @@ const LoginForm = () => {
                     >
                       Sign in
                     </button>
+
+                    <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+                      Don't have an account?{" "}
+                      <Link
+                        className="text-blue-600 transition hover:underline"
+                        to="/signup"
+                      >
+                        Sign up
+                      </Link>
+                      .
+                    </p>
                   </div>
                 </div>
               </div>

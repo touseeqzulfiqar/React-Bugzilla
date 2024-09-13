@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios"; // Import Axios
 import Alert from "./Alert"; // Assume you
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -176,6 +176,16 @@ const SignupForm = () => {
                     >
                       Sign up
                     </button>
+
+                    <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+                      Already have an account?{" "}
+                      <Link
+                        className="text-blue-600 transition hover:opacity-75"
+                        to="/login"
+                      >
+                        Login
+                      </Link>
+                    </p>
                   </div>
                 </div>
               </div>
