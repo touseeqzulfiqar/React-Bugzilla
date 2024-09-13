@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import SignUpForm from "./comps/SignUpForm";
+import LoginForm from "./comps/LoginForm";
+import Projects from "./comps/Projects"; // Assuming you have a Projects page component
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ProtectedRoute from "./comps/ProtectedRoute"; // Import the ProtectedRoute component
 
-function App() {
+const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/signup",
+      element: <SignUpForm />,
+    },
+    {
+      path: "/login",
+      element: <LoginForm />,
+    },
+    {
+      path: "/projects",
+      element: <ProtectedRoute element={<Projects />} />, // Protected route
+    },
+    {
+      path: "/",
+      element: <ProtectedRoute element={<Projects />} />, // Redirect to projects if logged in
+    },
+  ]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <RouterProvider router={router} />
+    </>
   );
-}
+};
 
 export default App;
